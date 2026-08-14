@@ -1,0 +1,12 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4 fw-bold">Expense Flow</h1>
+    <label>Manage your expenses and finances here!</label>
+    <br/>
+    <br/>
+    <a asp-controller="Home" asp-action="Expenses" class="btn btn-primary">Overview</a>
+    <a asp-controller="Home" asp-action="CreateEditExpense" class="btn btn-secondary">Create</a>
+</div>
