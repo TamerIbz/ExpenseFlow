@@ -130,6 +130,7 @@ C:\Users\tamib\Documents\C#\Asp-Practice\01\ExpenseFlow\ExpenseFlow\obj\Debug\ne
 C:\Users\tamib\Documents\C#\Asp-Practice\01\ExpenseFlow\ExpenseFlow\obj\Debug\net10.0\ExpenseFlow.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\tamib\Documents\C#\Asp-Practice\01\ExpenseFlow\ExpenseFlow\obj\Debug\net10.0\ExpenseFlow.RazorAssemblyInfo.cache
 C:\Users\tamib\Documents\C#\Asp-Practice\01\ExpenseFlow\ExpenseFlow\obj\Debug\net10.0\ExpenseFlow.RazorAssemblyInfo.cs
+C:\Users\tamib\Documents\C#\Asp-Practice\01\ExpenseFlow\ExpenseFlow\obj\Debug\net10.0\ExpenseFlow.sourcelink.json
 C:\Users\tamib\Documents\C#\Asp-Practice\01\ExpenseFlow\ExpenseFlow\obj\Debug\net10.0\rjimswa.dswa.cache.json
 C:\Users\tamib\Documents\C#\Asp-Practice\01\ExpenseFlow\ExpenseFlow\obj\Debug\net10.0\rjsmrazor.dswa.cache.json
 C:\Users\tamib\Documents\C#\Asp-Practice\01\ExpenseFlow\ExpenseFlow\obj\Debug\net10.0\rjsmcshtml.dswa.cache.json
@@ -198,8 +199,8 @@ C:\Users\tamib\Documents\C#\Asp-Practice\01\ExpenseFlow\ExpenseFlow\obj\Debug\ne
 C:\Users\tamib\Documents\C#\Asp-Practice\01\ExpenseFlow\ExpenseFlow\obj\Debug\net10.0\compressed\nagbe8qhqu-{0}-9vr69e8ynj-9vr69e8ynj.gz
 C:\Users\tamib\Documents\C#\Asp-Practice\01\ExpenseFlow\ExpenseFlow\obj\Debug\net10.0\compressed\nldqh10kdw-{0}-87fc7y1x7t-87fc7y1x7t.gz
 C:\Users\tamib\Documents\C#\Asp-Practice\01\ExpenseFlow\ExpenseFlow\obj\Debug\net10.0\compressed\9hncwmtesn-{0}-mlv21k5csn-mlv21k5csn.gz
-C:\Users\tamib\Documents\C#\Asp-Practice\01\ExpenseFlow\ExpenseFlow\obj\Debug\net10.0\compressed\vustmrizzq-{0}-3vtf67kuas-3vtf67kuas.gz
-C:\Users\tamib\Documents\C#\Asp-Practice\01\ExpenseFlow\ExpenseFlow\obj\Debug\net10.0\compressed\sv75vm40an-{0}-3vtf67kuas-3vtf67kuas.gz
+C:\Users\tamib\Documents\C#\Asp-Practice\01\ExpenseFlow\ExpenseFlow\obj\Debug\net10.0\compressed\vustmrizzq-{0}-rlb8vt6s1e-rlb8vt6s1e.gz
+C:\Users\tamib\Documents\C#\Asp-Practice\01\ExpenseFlow\ExpenseFlow\obj\Debug\net10.0\compressed\sv75vm40an-{0}-rlb8vt6s1e-rlb8vt6s1e.gz
 C:\Users\tamib\Documents\C#\Asp-Practice\01\ExpenseFlow\ExpenseFlow\obj\Debug\net10.0\staticwebassets.build.json
 C:\Users\tamib\Documents\C#\Asp-Practice\01\ExpenseFlow\ExpenseFlow\obj\Debug\net10.0\staticwebassets.build.json.cache
 C:\Users\tamib\Documents\C#\Asp-Practice\01\ExpenseFlow\ExpenseFlow\obj\Debug\net10.0\staticwebassets.development.json

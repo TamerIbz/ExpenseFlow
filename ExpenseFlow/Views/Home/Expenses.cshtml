@@ -9,50 +9,62 @@
     <br/>
     <hr/>
     <div class="d-flex justify-content-center align-items-center gap-5">
-        <h3 class="mb-0">Total Expenses $@ViewBag.Expenses</h3>
+        <h3 class="mb-0">Total Expenses £@ViewBag.Expenses</h3>
         <a asp-controller="Home" asp-action="CreateEditExpense" class="btn btn-primary ">Create</a>
     </div>
     <br/>
     
     <table class="table">
-        <thead>
+        <thead> @*titles *@
         <tr>
+            @* <th> *@
+            @*     Id *@
+            @* </th> *@
             <th>
-                Id
+                Title
+            </th>
+            <th>
+                Category
             </th>
             <th>
                 Amount
             </th>
-            <th>
-                Description
-            </th>
+            @* <th> *@
+            @*     Description *@
+            @* </th> *@
             <th>
                 Actions
             </th>
         </tr>
         </thead>
         <tbody>
-            @{
-                foreach (var expense in Model)
-                {
-                    <tr>
-                        <td>
-                            @expense.Id
-                        </td>
-                        <td>
-                            @expense.Amount
-                        </td>
-                        <td>
-                            @expense.Description
-                        </td>
-                        <td>
-                            <a asp-action="CreateEditExpense" asp-route-id="@expense.Id" class="me-1">Edit</a>
-                            <a asp-action="DeleteExpense" asp-route-id="@expense.Id"
-                               onclick="return confirm('Are you sure?');">Delete</a>
-                        </td>
-                    </tr>
-                }
+        @{
+            foreach (var expense in Model)
+            {
+                <tr>
+                    @* <td> *@
+                    @*     @expense.Id *@
+                    @* </td> *@
+                    <td>
+                        @expense.Title
+                    </td>
+                    <td>
+                        @(expense.Category?.Name ?? "No Category")
+                    </td>
+                    <td>
+                        £@expense.Amount
+                    </td>
+                    @* <td> *@
+                    @*     $1$ @expense.Description #1# *@
+                    @* </td> *@
+                    <td>
+                        <a asp-action="CreateEditExpense" asp-route-id="@expense.Id" class="me-1">Edit</a>
+                        <a asp-action="DeleteExpense" asp-route-id="@expense.Id"
+                           onclick="return confirm('Are you sure?');">Delete</a>
+                    </td>
+                </tr>
             }
+        }
         </tbody>
     </table>
 </div>

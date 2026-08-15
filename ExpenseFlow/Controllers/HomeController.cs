@@ -1,5 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using mvcPactice01.Models;
 
 namespace mvcPactice01.Controllers;
@@ -20,7 +22,7 @@ public class HomeController : Controller
 
     public IActionResult Expenses()
     {
-        var allExpenses = _context.Expenses.ToList();
+        var allExpenses = _context.Expenses.Include(e => e.Category).ToList();
 
         var totalExpenses = allExpenses.Sum(x => x.Amount);
         ViewBag.Expenses = totalExpenses;
@@ -28,9 +30,11 @@ public class HomeController : Controller
         return View(allExpenses);
     }
     
-    public IActionResult CreateEditExpense(int? id)
+    public IActionResult CreateEditExpense(int? id) // pressing on CreateEditExpense btn -> gonna show empty form if id null, 
     {
-        if (id != null)
+        ShowCategoryList();
+
+        if (id != null) // show prev data that has already been created (id == id, show id table)
         {
             var expenseInDb = _context.Expenses.SingleOrDefault(expense => expense.Id == id);
             return View(expenseInDb);
@@ -46,8 +50,18 @@ public class HomeController : Controller
         return RedirectToAction("Expenses");
     }
 
-    public IActionResult CreateEditExpenseForm(Expense model)
+    public IActionResult CreateEditExpenseForm(Expense model) // pressing button to create form with details filled in
     {
+        // if(!ModelState.IsValid)
+        // if (string.IsNullOrEmpty(model.Title) || (model.CategoryId == 0 || model.CategoryId == null)) // invalid form
+        if(!ModelState.IsValid) // invalid form
+        {
+            //invalid
+
+            ShowCategoryList();
+            return View("CreateEditExpense", model);
+        };
+        
         if (model.Id == 0)
         {
             // creating
@@ -61,6 +75,14 @@ public class HomeController : Controller
 
         _context.SaveChanges();
         return RedirectToAction("Expenses");
+    }
+
+    private void ShowCategoryList()
+    {
+        ViewBag.Categories = new SelectList(
+            _context.Categories,
+            "Id",
+            "Name");
     }
 
     public IActionResult Privacy()

@@ -6,7 +6,9 @@ public class Expense
 {
     public int Id { get; set; }
     public decimal Amount { get; set; }
-    [Required] public string? Description { get; set; }
-    
-    
+    [Required(ErrorMessage = "*REQUIRED*")][StringLength(50, MinimumLength = 2)] public string? Title { get; set; } = string.Empty;
+    // [StringLength(150, MinimumLength = 5)]public string? Description { get; set; } = string.Empty;
+    [Required(ErrorMessage = "*REQUIRED*")]public int? CategoryId { get; set; }
+    public Category? Category { get; set; } = null!;
+
 }
