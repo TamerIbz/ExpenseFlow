@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-namespace mvcPactice01.Models;
+namespace ExpenseFlow.Models;
 
 public class ExpenseDbContext : DbContext
 {

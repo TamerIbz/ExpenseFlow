@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using mvcPactice01.Models;
+using ExpenseFlow.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 

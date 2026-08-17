@@ -2,44 +2,46 @@
     ViewData["Title"] = "Create / Edit";
 }
 
-@model mvcPactice01.Models.Expense;
+@model ExpenseFlow.Models.Expense;
+@using ExpenseFlow.Models.Enums
 
 <div class="text-center">
     <h1 class="display-4">Create or Edit Expense</h1>
 </div>
 
-@* for required, set required with error message, then span here then home controller -> if null ect *@
+@* for required, set required with error message, then span here then home controller (backend -> model error, or return depending) -> if null ect *@
 
 <form asp-action="CreateEditExpenseForm" asp-controller="Home">
     <input hidden class="form-control" type="number" placeholder="0" asp-for="Id"/>
     
     <label class ="mt-4">Title</label>
-    @* <span asp-validation-for="Title" class="text-danger"></span> *@
     <input class="form-control" type="text" placeholder="Add a title" asp-for="Title"/>
     <span asp-validation-for="Title" class="text-danger d-block"></span>
-    @* <span asp-validation-for="Title" class="text-danger"></span> *@
     
-    @* <label class ="mt-4">Description</label> *@
-    @* <input class="form-control" type="text" placeholder="Add a description" asp-for="Description"/> *@
-    
-    @* <label class ="mt-4">Category</label> *@
-    @* <br/> *@
-
-    <select class="form-control mt-4" asp-for="CategoryId" asp-items="ViewBag.Categories">
+    <label class ="mt-4">Category</label>
+    <select class="form-control" asp-for="CategoryId" asp-items="ViewBag.Categories">
         <option value="">Select a category</option>
     </select>
     <span asp-validation-for="CategoryId" class="text-danger d-block"></span>
     
-    
-    @* <input class="form-control" type="Category" asp-for="Category"/> *@
-    
     <label class ="mt-4">Amount £</label>
     <input class="form-control" type="number" placeholder="0.00" asp-for="Amount" step="0.01" onblur="this.value = parseFloat(this.value).toFixed(2)" />
-
+    
+    <label class ="mt-4">Date</label>
+    <input asp-for="Date" class="form-control" type="date"/>
+    
+    
+    <label class="mt-4">Payment Type</label>
+    <select asp-for="PaymentMethod" class="form-control" asp-items="Html.GetEnumSelectList<PaymentMethods>()">
+        @* <option value="">Select Payment</option> *@
+    </select>
+    
+    <label class="mt-4">Recurring</label>
+    <select asp-for="RecurringType" class="form-control" asp-items="Html.GetEnumSelectList<RecurringType>()">
+        @* <option value=""> Select Recurring</option> *@
+    </select>
     
     <button class="btn btn-primary mt-4" type="submit">Ok</button>
 </form>
-
-
 @* check amount -> 'text' , 0.00 *@
 @*  new title ect, subscription -> test it works  *@

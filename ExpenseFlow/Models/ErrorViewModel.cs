@@ -1,4 +1,4 @@
-namespace mvcPactice01.Models;
+namespace ExpenseFlow.Models;
 
 public class ErrorViewModel
 {

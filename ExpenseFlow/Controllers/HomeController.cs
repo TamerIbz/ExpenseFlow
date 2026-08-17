@@ -1,10 +1,10 @@
 using System.Diagnostics;
+using ExpenseFlow.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using mvcPactice01.Models;
 
-namespace mvcPactice01.Controllers;
+namespace ExpenseFlow.Controllers;
 
 public class HomeController : Controller
 {
@@ -22,6 +22,7 @@ public class HomeController : Controller
 
     public IActionResult Expenses()
     {
+        //.OrderByDescending(e => e.Id)
         var allExpenses = _context.Expenses.Include(e => e.Category).ToList();
 
         var totalExpenses = allExpenses.Sum(x => x.Amount);
@@ -52,13 +53,11 @@ public class HomeController : Controller
 
     public IActionResult CreateEditExpenseForm(Expense model) // pressing button to create form with details filled in
     {
-        // if(!ModelState.IsValid)
-        // if (string.IsNullOrEmpty(model.Title) || (model.CategoryId == 0 || model.CategoryId == null)) // invalid form
-        if(!ModelState.IsValid) // invalid form
+         if (string.IsNullOrEmpty(model.Title) || (model.CategoryId == 0 || model.CategoryId == null)) // invalid form
+        //if(!model.IsValid) // invalid form
         {
             //invalid
-
-            ShowCategoryList();
+            ShowCategoryList(); // show categories again since page is reloaded
             return View("CreateEditExpense", model);
         };
         

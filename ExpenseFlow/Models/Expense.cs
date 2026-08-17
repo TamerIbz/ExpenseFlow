@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using ExpenseFlow.Models.Enums;
 
-namespace mvcPactice01.Models;
+namespace ExpenseFlow.Models;
 
 public class Expense
 {
@@ -9,6 +10,9 @@ public class Expense
     [Required(ErrorMessage = "*REQUIRED*")][StringLength(50, MinimumLength = 2)] public string? Title { get; set; } = string.Empty;
     // [StringLength(150, MinimumLength = 5)]public string? Description { get; set; } = string.Empty;
     [Required(ErrorMessage = "*REQUIRED*")]public int? CategoryId { get; set; }
-    public Category? Category { get; set; } = null!;
+    public Category? Category { get; set; }
+    public DateTime? Date { get; set; }
+    public PaymentMethods PaymentMethod { get; set; } = PaymentMethods.DebitCard;
+    public RecurringType RecurringType { get; set; } = RecurringType.None;
 
 }

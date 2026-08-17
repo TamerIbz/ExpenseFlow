@@ -33,6 +33,15 @@
             @*     Description *@
             @* </th> *@
             <th>
+                Date
+            </th>
+            <th>
+                Payment Method
+            </th>
+            <th>
+                Recurring
+            </th>
+            <th>
                 Actions
             </th>
         </tr>
@@ -54,10 +63,17 @@
                     <td>
                         £@expense.Amount
                     </td>
-                    @* <td> *@
-                    @*     $1$ @expense.Description #1# *@
-                    @* </td> *@
                     <td>
+                        @(expense.Date?.ToString("dd/MM/yyyy") ?? "No date")
+                    </td>
+                    <td>
+                        @expense.PaymentMethod
+                    </td>
+                    <td>
+                        @expense.RecurringType
+                    </td>
+                    <td>
+                        @* asp-controller="Home" *@
                         <a asp-action="CreateEditExpense" asp-route-id="@expense.Id" class="me-1">Edit</a>
                         <a asp-action="DeleteExpense" asp-route-id="@expense.Id"
                            onclick="return confirm('Are you sure?');">Delete</a>

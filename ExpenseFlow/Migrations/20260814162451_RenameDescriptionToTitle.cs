@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace mvcPactice01.Migrations
+namespace ExpenseFlow.Migrations
 {
     /// <inheritdoc />
     public partial class RenameDescriptionToTitle : Migration
