@@ -9,6 +9,9 @@ namespace ExpenseFlow.Controllers;
 public class HomeController : Controller
 {
     private readonly ExpenseDbContext _context;
+    
+    private const string CreateEditExpenseName = "CreateEditExpense";
+    private const string ExpensesName = "Expenses";
 
     public HomeController( ExpenseDbContext context)
     {
@@ -20,10 +23,14 @@ public class HomeController : Controller
         return View();
     }
 
-    public IActionResult Expenses()
+    public async Task<IActionResult> Expenses()
     {
         //.OrderByDescending(e => e.Id)
-        var allExpenses = _context.Expenses.Include(e => e.Category).ToList();
+
+        var allExpenses = await _context.Expenses.
+            Include(e => e.Category).
+            OrderBy(i => i.Id).
+            ToListAsync();
 
         var totalExpenses = allExpenses.Sum(x => x.Amount);
         ViewBag.Expenses = totalExpenses;
@@ -31,9 +38,9 @@ public class HomeController : Controller
         return View(allExpenses);
     }
     
-    public IActionResult CreateEditExpense(int? id) // pressing on CreateEditExpense btn -> gonna show empty form if id null, 
+    public async Task<IActionResult> CreateEditExpense(int? id) // pressing on CreateEditExpense btn -> gonna show empty form if id null, ->display form
     {
-        ShowCategoryList();
+        await ShowCategoryList();
 
         if (id != null) // show prev data that has already been created (id == id, show id table)
         {
@@ -43,22 +50,23 @@ public class HomeController : Controller
         return View();
     }
 
-    public IActionResult DeleteExpense(int id)
+    public async Task<IActionResult> DeleteExpense(int id)
     {
         var expenseInDb = _context.Expenses.SingleOrDefault(expense => expense.Id == id);
-        _context.Expenses.Remove(expenseInDb);
-        _context.SaveChanges();
-        return RedirectToAction("Expenses");
+        if (expenseInDb != null) _context.Expenses.Remove(expenseInDb);
+        await _context.SaveChangesAsync();
+        return RedirectToAction(ExpensesName);
     }
 
-    public IActionResult CreateEditExpenseForm(Expense model) // pressing button to create form with details filled in
+    public async Task<IActionResult> CreateEditExpenseForm(Expense model) // pressing button to create form with details filled in -? save form
     {
-         if (string.IsNullOrEmpty(model.Title) || (model.CategoryId == 0 || model.CategoryId == null)) // invalid form
+        
         //if(!model.IsValid) // invalid form
+         if (string.IsNullOrWhiteSpace(model.Title) || (model.CategoryId == 0 || model.CategoryId == null)) // invalid form
         {
             //invalid
-            ShowCategoryList(); // show categories again since page is reloaded
-            return View("CreateEditExpense", model);
+            await ShowCategoryList(); // show categories again since page is reloaded
+            return View(CreateEditExpenseName, model);
         };
         
         if (model.Id == 0)
@@ -72,16 +80,23 @@ public class HomeController : Controller
             _context.Expenses.Update(model);
         }
 
-        _context.SaveChanges();
-        return RedirectToAction("Expenses");
+        await _context.SaveChangesAsync();
+        return RedirectToAction(ExpensesName);
     }
 
-    private void ShowCategoryList()
+    private async Task ShowCategoryList()
     {
-        ViewBag.Categories = new SelectList(
-            _context.Categories,
-            "Id",
-            "Name");
+        try
+        {
+            ViewBag.Categories = new SelectList(await
+                    _context.Categories.ToListAsync(),
+                nameof(Category.Id),
+                nameof(Category.Name));
+        }
+        catch (Exception e)
+        {
+            throw; // TODO handle exception
+        }
     }
 
     public IActionResult Privacy()
