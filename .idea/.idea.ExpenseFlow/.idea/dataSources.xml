@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="expense [2]" uuid="abb0f0f9-9dc5-4f05-9667-d53d32311d2e">
-      <driver-ref>sqlite.xerial</driver-ref>
+    <data-source source="LOCAL" name="ExpenseFlow@localhost" uuid="a4c176d5-e7cb-4107-9be4-4cd9d5ba1fee">
+      <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
-      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/ExpenseFlow/expense.db</jdbc-url>
+      <configured-by-url>true</configured-by-url>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/ExpenseFlow?password=CinSql%3F&amp;user=postgres</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

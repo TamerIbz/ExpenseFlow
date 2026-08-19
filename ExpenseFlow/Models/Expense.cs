@@ -11,7 +11,7 @@ public class Expense
     // [StringLength(150, MinimumLength = 5)]public string? Description { get; set; } = string.Empty;
     [Required(ErrorMessage = "*REQUIRED*")]public int? CategoryId { get; set; }
     public Category? Category { get; set; }
-    public DateTime? Date { get; set; }
+    public DateOnly? Date { get; set; }
     public PaymentMethods PaymentMethod { get; set; } = PaymentMethods.DebitCard;
     public RecurringType RecurringType { get; set; } = RecurringType.None;
 
