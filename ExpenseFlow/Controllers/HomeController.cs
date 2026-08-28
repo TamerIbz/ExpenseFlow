@@ -12,28 +12,70 @@ public class HomeController : Controller
     
     private const string CreateEditExpenseName = "CreateEditExpense";
     private const string ExpensesName = "Expenses";
+    private List<Expense>  allExpenses;
 
     public HomeController( ExpenseDbContext context)
     {
         _context = context;
     }
     
-    public IActionResult Index()
+    // what is viewbag, walk through, 
+    public async Task<IActionResult> Index()
     {
+        var spendingCategory = await _context.Expenses
+            .Include(e => e.Category)
+            .GroupBy(e => e.Category!.Name)
+            .Select(g => new
+            {
+                Category = g.Key,
+                Total = g.Sum(e => e.Amount)
+            }).ToListAsync();
+        
+        ViewBag.CategoryNames = spendingCategory
+            .Select(x => x.Category)
+            .ToList();
+
+        ViewBag.CategoryTotals = spendingCategory
+            .Select(x => x.Total)
+            .ToList();
+        
+        //  allExpenses = await _context.Expenses.
+        //     Include(e => e.Category).
+        //     OrderBy(i => i.Id).
+        //     ToListAsync();
+        //
+        // var totalExpenses = allExpenses.Sum(x => x.Amount);
+        // ViewBag.TotalExpenses = totalExpenses;
+
+        ViewBag.TotalExpenses = await _context.Expenses.SumAsync(e => e.Amount);
+        var topCategory= spendingCategory
+            .OrderByDescending(i => i.Total)
+            .FirstOrDefault();
+
+        ViewBag.TopCategory = topCategory?.Category;
+        
+        var today = DateOnly.FromDateTime(DateTime.Today);
+        ViewBag.MonthTotal = await _context.Expenses.Where(e =>
+            e.Date.HasValue 
+            && e.Date.Value.Year == today.Year 
+            && e.Date.Value.Month == today.Month).SumAsync(e=>e.Amount);
+        
         return View();
     }
 
     public async Task<IActionResult> Expenses()
     {
+        
+        // Console.WriteLine("called");
         //.OrderByDescending(e => e.Id)
 
         var allExpenses = await _context.Expenses.
             Include(e => e.Category).
             OrderBy(i => i.Id).
             ToListAsync();
-
+        
         var totalExpenses = allExpenses.Sum(x => x.Amount);
-        ViewBag.Expenses = totalExpenses;
+        ViewBag.TotalExpenses = totalExpenses;
         
         return View(allExpenses);
     }

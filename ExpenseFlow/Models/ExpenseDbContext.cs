@@ -1,7 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 namespace ExpenseFlow.Models;
 
-public class ExpenseDbContext : DbContext
+public class ExpenseDbContext : IdentityDbContext
 {
     public DbSet<Expense> Expenses { get; set; }
 
