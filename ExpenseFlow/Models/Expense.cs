@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using ExpenseFlow.Models.Enums;
+using Microsoft.AspNetCore.Identity;
 
 namespace ExpenseFlow.Models;
 
@@ -14,5 +15,8 @@ public class Expense
     public DateOnly? Date { get; set; }
     public PaymentMethods PaymentMethod { get; set; } = PaymentMethods.DebitCard;
     public RecurringType RecurringType { get; set; } = RecurringType.None;
+
+    public string UserId { get; set; } = string.Empty;
+    public IdentityUser User { get; set; } = null!;
 
 }

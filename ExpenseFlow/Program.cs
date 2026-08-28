@@ -1,17 +1,22 @@
 using Microsoft.EntityFrameworkCore;
 using ExpenseFlow.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-// builder.Services.AddDbContext<ExpenseDbContext>(options => 
-//     options.UseSqlite("Data Source=expense.db"));
 
 builder.Services.AddDbContext<ExpenseDbContext>(options =>
     options.UseNpgsql(
         builder.Configuration.GetConnectionString("DefaultConnection"))
 );
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = false;
+}).AddEntityFrameworkStores<ExpenseDbContext>();
 
 
 var app = builder.Build();
@@ -27,6 +32,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

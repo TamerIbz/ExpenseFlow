@@ -5,7 +5,6 @@ namespace ExpenseFlow.Models;
 public class ExpenseDbContext : IdentityDbContext
 {
     public DbSet<Expense> Expenses { get; set; }
-
     public DbSet<Category> Categories { get; set; }
 
     public ExpenseDbContext(DbContextOptions<ExpenseDbContext> options) : base(options)
@@ -15,6 +14,7 @@ public class ExpenseDbContext : IdentityDbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<Category>().HasData(
             new Category { Id = 1, Name = "Food" },
             new Category { Id = 2, Name = "Entertainment" },
