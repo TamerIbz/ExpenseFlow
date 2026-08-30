@@ -16,7 +16,9 @@ public class Expense
     public PaymentMethods PaymentMethod { get; set; } = PaymentMethods.DebitCard;
     public RecurringType RecurringType { get; set; } = RecurringType.None;
 
-    public string UserId { get; set; } = string.Empty;
-    public IdentityUser User { get; set; } = null!;
+    //
+    // // these were from gpt
+    // public string? UserId { get; set; } = string.Empty;
+    // public IdentityUser? User { get; set; } = null!;
 
 }

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 namespace ExpenseFlow.Models;
 
-public class ExpenseDbContext : IdentityDbContext
+public class ExpenseDbContext : IdentityDbContext<Users>
 {
     public DbSet<Expense> Expenses { get; set; }
     public DbSet<Category> Categories { get; set; }

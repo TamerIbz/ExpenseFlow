@@ -13,10 +13,23 @@ builder.Services.AddDbContext<ExpenseDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options =>
-{
-    options.SignIn.RequireConfirmedAccount = false;
-}).AddEntityFrameworkStores<ExpenseDbContext>();
+// builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+// {
+//     options.SignIn.RequireConfirmedAccount = false;
+// }).AddEntityFrameworkStores<ExpenseDbContext>();
+
+builder.Services.AddIdentity<Users, IdentityRole>(options =>
+    {
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequiredLength = 8;
+        options.Password.RequireUppercase = false;
+        options.Password.RequireLowercase = false;
+        options.User.RequireUniqueEmail = true;
+        options.SignIn.RequireConfirmedAccount = false;
+        options.SignIn.RequireConfirmedPhoneNumber = false;
+    })
+    .AddEntityFrameworkStores<ExpenseDbContext>()
+    .AddDefaultTokenProviders();
 
 
 var app = builder.Build();
