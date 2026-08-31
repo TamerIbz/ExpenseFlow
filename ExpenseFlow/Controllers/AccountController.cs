@@ -107,11 +107,6 @@ public class AccountController : Controller
         return View(model);
     }
     
-    // [HttpGet]
-    // public IActionResult ChangePassword()
-    // {
-    //     return View();
-    // }
     [HttpGet]
     public IActionResult ChangePassword(string username)
     {
@@ -160,6 +155,7 @@ public class AccountController : Controller
         }
     }
 
+    [HttpGet]
     public async Task<IActionResult> Logout()
     {
         await _signInManager.SignOutAsync();

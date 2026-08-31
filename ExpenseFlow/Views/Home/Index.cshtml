@@ -2,36 +2,38 @@
     ViewData["Title"] = "Home Page";
 }
 
+@using Microsoft.AspNetCore.Identity;
+@* @inject SignInManager<Users> SignInManager; *@
+
 <div class="text-center">
+@if(User.Identity?.IsAuthenticated == true)
+{
     <h1 class="display-4 fw-bold">ExpenseFlow</h1>
     <label>Manage your expenses and finances here!</label>
     <br/>
     <br/>
-    <a asp-controller="Home" asp-action="Expenses" class="btn btn-primary">Overview</a>
-    <a asp-controller="Home" asp-action="CreateEditExpense" class="btn btn-secondary">Create</a>
-    
-    
+    <a asp-controller="Expense" asp-action="Index" class="btn btn-primary">Overview</a>
+    <a asp-controller="Expense" asp-action="CreateEditExpense" class="btn btn-secondary">Create</a>
+
+
     <div class="row text-center mb-4">
-    
-        
         <div class="col-md-4 mt-4">
             <h5>Top Category</h5>
             <h3 class="mt-0">@ViewBag.TopCategory</h3>
         </div>
-        
+
         <div class="col-md-4 mt-4">
             <h5>Total Spent</h5>
             <h3 class="mt-0">£@ViewBag.TotalExpenses</h3>
         </div>
-        
+
         <div class="col-md-4 mt-4">
             <h5>This Month</h5>
             <h3 class="mt-0">£@ViewBag.MonthTotal</h3>
         </div>
-        
     </div>
-    
-    
+
+
     <div class="d-flex justify-content-center mt-0">
         <div style="width: 450px; height: 350px;">
             <canvas id="expenseChart"></canvas>
@@ -68,44 +70,25 @@
                         }
                     }
                 }
+                
             });
-        @* new Chart(document.getElementById('expenseChart'), *@
-        @*     { *@
-        @*         type: 'doughnut', *@
-        @*         data: { *@
-        @*             labels: categories, *@
-        @*             datasets: [{ *@
-        @*                 data: totals *@
-        @*             }] *@
-        @*         }, *@
-        @* *@
-        @*         options: { *@
-        @*             responsive: true, *@
-        @*             maintainAspectRatio: true, *@
-        @* *@
-        @*             cutout: '65%', *@
-        @*             plugins: { *@
-        @*                 title: { *@
-        @*                     display:true, *@
-        @*                     text: 'Spending by category' *@
-        @*                 }, *@
-        @* *@
-        @*                 legend: { *@
-        @*                     position: 'bottom', *@
-        @*                     labels: { *@
-        @*                         generateLabels(chart) { *@
-        @*                             const data = chart.data; *@
-        @*                             return data.labels.map((label, i) => ({ *@
-        @*                                 text: `${label} - £${data.datasets[0].data[i]}`, *@
-        @*                                 fillStyle: chart.data.datasets[0].backgroundColor?.[i] *@
-        @*                             })); *@
-        @*                         } *@
-        @*                     } *@
-        @*                 } *@
-        @*             } *@
-        @*         } *@
-        @*     }) *@
     </script>
         </div>
     </div>
+}
+else
+{
+    <h1 class="display-4 fw-bold">ExpenseFlow</h1>
+    <label>Please sign in to manager your expenses!</label>
+    <br/>
+    <br/>
+    @* <a class="nav-link text-dark" *@
+    @*    asp-controller="Account" *@
+    @*    asp-action="Login"> *@
+    @*     Login *@
+    @* </a> *@
+    
+    <a asp-controller="Account" asp-action="Login" class="btn btn-primary">Login</a>
+    <a asp-controller="Account" asp-action="SignUp" class="btn btn-secondary">SignUp</a>
+}
 </div>

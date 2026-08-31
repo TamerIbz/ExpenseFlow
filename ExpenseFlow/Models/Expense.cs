@@ -18,7 +18,7 @@ public class Expense
 
     //
     // // these were from gpt
-    // public string? UserId { get; set; } = string.Empty;
-    // public IdentityUser? User { get; set; } = null!;
+    public string? UserId { get; set; } = string.Empty;
+    public Users? User { get; set; } = null!;
 
 }
