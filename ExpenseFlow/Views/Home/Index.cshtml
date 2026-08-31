@@ -2,6 +2,7 @@
     ViewData["Title"] = "Home Page";
 }
 
+@model List<Expense>
 @using Microsoft.AspNetCore.Identity;
 @* @inject SignInManager<Users> SignInManager; *@
 
@@ -17,9 +18,17 @@
 
 
     <div class="row text-center mb-4">
+      
         <div class="col-md-4 mt-4">
-            <h5>Top Category</h5>
-            <h3 class="mt-0">@ViewBag.TopCategory</h3>
+            @if (Model.Any())
+            {
+                <h5>Top Category</h5>
+                <h3 class="mt-0">@ViewBag.TopCategory</h3>
+            }
+            else
+            {
+                <h5>No Category</h5>
+            }
         </div>
 
         <div class="col-md-4 mt-4">
@@ -33,48 +42,53 @@
         </div>
     </div>
 
+    @if (Model.Any())
+    {
+        <div class="d-flex justify-content-center mt-0">
+            <div style="width: 450px; height: 350px;">
+                <canvas id="expenseChart"></canvas>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <script>
 
-    <div class="d-flex justify-content-center mt-0">
-        <div style="width: 450px; height: 350px;">
-            <canvas id="expenseChart"></canvas>
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-            <script>
-                
-        const categories = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.CategoryNames));
-        const totals = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.CategoryTotals));
-        
-        new Chart(document.getElementById('expenseChart'),
-            {
-                type: 'doughnut',
-                data: {
-                    labels: categories,
-                    datasets: [{
-                        data: totals
-                    }]
-                },
+                const categories = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.CategoryNames));
+                const totals = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.CategoryTotals));
 
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-
-                    cutout: '60%',
-
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
+                new Chart(document.getElementById('expenseChart'),
+                    {
+                        type: 'doughnut',
+                        data: {
+                            labels: categories,
+                            datasets: [{
+                                data: totals
+                            }]
                         },
 
-                        title: {
-                            display: true,
-                            text: 'Spending by Category'
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+
+                            cutout: '60%',
+
+                            plugins: {
+                                legend: {
+                                    position: 'bottom'
+                                },
+
+                                title: {
+                                    display: true,
+                                    text: 'Spending by Category'
+                                }
+                            }
                         }
-                    }
-                }
+                        
+
+                    });
                 
-            });
-    </script>
+
+            </script>
+            </div>
         </div>
-    </div>
+    }
 }
 else
 {

@@ -25,15 +25,13 @@ public class ExpenseController : Controller
     [Authorize]
     public async Task<IActionResult> Index()
     {
+        var userId   = _userManager.GetUserId(User);
         
-        // Console.WriteLine("called");
-        //.OrderByDescending(e => e.Id)
-    
-        var allExpenses = await _context.Expenses.
-            Include(e => e.Category).
-            OrderBy(i => i.Id).
-            ToListAsync();
-        ;
+        var allExpenses = await _context.Expenses
+            .Where(e=>e.UserId == userId)
+            .Include(e => e.Category)
+            .OrderBy(i => i.Id)
+            .ToListAsync(); 
         
         var totalExpenses = allExpenses.Sum(x => x.Amount);
         ViewBag.TotalExpenses = totalExpenses;
@@ -41,6 +39,7 @@ public class ExpenseController : Controller
         return View(allExpenses);
     }
     
+    [Authorize]
     public async Task<IActionResult> CreateEditExpense(int? id) // pressing on CreateEditExpense btn -> gonna show empty form if id null, ->display form
     {
         await ShowCategoryList();
@@ -63,14 +62,14 @@ public class ExpenseController : Controller
 
     public async Task<IActionResult> CreateEditExpenseForm(Expense model) // pressing button to create form with details filled in -? save form
     {
-        //if(!model.IsValid) // invalid form
-         if (string.IsNullOrWhiteSpace(model.Title) || (model.CategoryId == 0 || model.CategoryId == null)) // invalid form
+        //(!ModelState.IsValid) || 
+        if (string.IsNullOrWhiteSpace(model.Title) || (model.CategoryId == 0 || model.CategoryId == null)) // invalid form
         {
             //invalid
             await ShowCategoryList(); // show categories again since page is reloaded
             return View(CreateEditExpenseName, model);
         };
-        
+        model.UserId = _userManager.GetUserId(User);
         if (model.Id == 0)
         {
             // creating

@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using ExpenseFlow.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,14 +11,13 @@ namespace ExpenseFlow.Controllers;
 public class HomeController : Controller
 {
      private readonly ExpenseDbContext _context;
-    //
-    // private const string CreateEditExpenseName = "CreateEditExpense";
-    // private const string ExpensesName = "Expenses";
-    // private List<Expense>  allExpenses;
+     private readonly UserManager<Users> _userManager;
+    
 
-    public HomeController( ExpenseDbContext context)
+    public HomeController( ExpenseDbContext context, UserManager<Users> userManager)
     {
         _context = context;
+        _userManager = userManager;
     }
     
     // what is viewbag, walk through, 
@@ -27,32 +27,37 @@ public class HomeController : Controller
         {
             return View();
         }
-        var spendingCategory = await _context.Expenses
+        
+        var userId   = _userManager.GetUserId(User);
+        var allExpenses = await _context.Expenses
+            .Where(e=>e.UserId == userId)
             .Include(e => e.Category)
+            .OrderBy(i => i.Id)
+            .ToListAsync();
+
+
+        // categories
+        var spendingCategory = allExpenses
             .GroupBy(e => e.Category!.Name)
             .Select(g => new
             {
                 Category = g.Key,
                 Total = g.Sum(e => e.Amount)
-            }).ToListAsync();
+            }).ToList();
         
+        // all cat names
         ViewBag.CategoryNames = spendingCategory
             .Select(x => x.Category)
             .ToList();
 
+        // total spending cat name
         ViewBag.CategoryTotals = spendingCategory
             .Select(x => x.Total)
             .ToList();
-        
-        //  allExpenses = await _context.Expenses.
-        //     Include(e => e.Category).
-        //     OrderBy(i => i.Id).
-        //     ToListAsync();
-        //
-        // var totalExpenses = allExpenses.Sum(x => x.Amount);
-        // ViewBag.TotalExpenses = totalExpenses;
 
-        ViewBag.TotalExpenses = await _context.Expenses.SumAsync(e => e.Amount);
+        
+        // total expense digit
+        ViewBag.TotalExpenses = allExpenses.Sum(e => e.Amount);
         var topCategory= spendingCategory
             .OrderByDescending(i => i.Total)
             .FirstOrDefault();
@@ -60,12 +65,12 @@ public class HomeController : Controller
         ViewBag.TopCategory = topCategory?.Category;
         
         var today = DateOnly.FromDateTime(DateTime.Today);
-        ViewBag.MonthTotal = await _context.Expenses.Where(e =>
+        ViewBag.MonthTotal =allExpenses.Where(e =>
             e.Date.HasValue 
             && e.Date.Value.Year == today.Year 
-            && e.Date.Value.Month == today.Month).SumAsync(e=>e.Amount);
+            && e.Date.Value.Month == today.Month).Sum(e=>e.Amount);
         
-        return View();
+        return View(allExpenses);
     }
     
     [Authorize]
