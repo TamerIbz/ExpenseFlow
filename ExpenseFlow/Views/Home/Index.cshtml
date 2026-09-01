@@ -2,17 +2,35 @@
     ViewData["Title"] = "Home Page";
 }
 
-@model List<Expense>
+@model ExpenseFlow.ViewModels.HomeViewModel
 @using Microsoft.AspNetCore.Identity;
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
 @* @inject SignInManager<Users> SignInManager; *@
 
-<div class="text-center">
+@section Styles {
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+}
+
+<div class="home-background text-center">
 @if(User.Identity?.IsAuthenticated == true)
 {
-    <h1 class="display-4 fw-bold">ExpenseFlow</h1>
-    <label>Manage your expenses and finances here!</label>
+    <div class="position-relative text-center">
+        <div class="position-absolute start-0">
+            <div class="d-inline-flex align-items-center bg-light border rounded-3 px-3 py-2 shadow-sm">
+                <span class="fw-semibold">Hi @ViewBag.UserName 👋</span>
+            </div>
+            
+            @* <span class="badge rounded-pill bg-light text-dark border px-3 py-2 shadow-sm"> *@
+            @*     Hi @ViewBag.UserName *@
+            @* </span> *@
+        </div>
+        <div>
+            <h1 class="display-4 fw-bold">ExpenseFlow</h1>
+            <label>Manage your expenses and finances here!</label>
+        </div>
+    </div>
     <br/>
-    <br/>
+    @* <br/> *@
     <a asp-controller="Expense" asp-action="Index" class="btn btn-primary">Overview</a>
     <a asp-controller="Expense" asp-action="CreateEditExpense" class="btn btn-secondary">Create</a>
 
@@ -20,10 +38,10 @@
     <div class="row text-center mb-4">
       
         <div class="col-md-4 mt-4">
-            @if (Model.Any())
+            @if (Model.Expenses.Any())
             {
                 <h5>Top Category</h5>
-                <h3 class="mt-0">@ViewBag.TopCategory</h3>
+                <h3 class="mt-0">@Model.TopCategory</h3>
             }
             else
             {
@@ -33,16 +51,16 @@
 
         <div class="col-md-4 mt-4">
             <h5>Total Spent</h5>
-            <h3 class="mt-0">£@ViewBag.TotalExpenses</h3>
+            <h3 class="mt-0">£@Model.TotalSpent</h3>
         </div>
 
         <div class="col-md-4 mt-4">
             <h5>This Month</h5>
-            <h3 class="mt-0">£@ViewBag.MonthTotal</h3>
+            <h3 class="mt-0">£@Model.MonthTotal</h3>
         </div>
     </div>
 
-    @if (Model.Any())
+    @if (Model.Expenses.Any())
     {
         <div class="d-flex justify-content-center mt-0">
             <div style="width: 450px; height: 350px;">
@@ -50,8 +68,8 @@
                 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                 <script>
 
-                const categories = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.CategoryNames));
-                const totals = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.CategoryTotals));
+                const categories = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CategoryNames));
+                const totals = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CategoryTotals));
 
                 new Chart(document.getElementById('expenseChart'),
                     {

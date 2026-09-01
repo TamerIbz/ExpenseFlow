@@ -7,7 +7,14 @@
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/ExpenseFlow.styles.css" asp-append-version="true"/>
+    @* <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /> *@
+
+    @await RenderSectionAsync("Styles", required: false)
+    
+    
+    @* <link rel="stylesheet" href="~/css/home.css" asp-append-version="true"/> *@
+    <link rel="icon" class="logo" type="image/png" href="~/Images/Logo.png" />
+    @* <img src="~/Images/Logo.png" class="logo" /> *@
 </head>
 <body>
 <header>
@@ -32,8 +39,6 @@
                     @* <li class="nav-item"> *@
                     @*     <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a> *@
                     @* </li> *@
-              
-                
                     <partial name="_ExpenseNavPartial"/>
                 </ul>
                 <partial name="_LoginPartial"/>
@@ -41,17 +46,24 @@
         </div>
     </nav>
 </header>
+<body class="d-flex flex-column min-vh-100">
 <div class="container">
     <main role="main" class="pb-3">
         @RenderBody()
     </main>
 </div>
 
-<footer class="border-top footer text-muted">
+
+@* <body class="d-flex flex-column min-vh-100">  *@
+@* <main role="main" class="flex-grow-1"> *@
+@*     @RenderBody() *@
+@* </main> *@
+<footer class="border-top footer text-muted py-3 mt-auto">
     <div class="container">
         &copy; 2026 - ExpenseFlow - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
     </div>
 </footer>
+</body>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>

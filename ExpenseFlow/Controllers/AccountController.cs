@@ -1,18 +1,22 @@
 ﻿using ExpenseFlow.Models;
 using ExpenseFlow.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseFlow.Controllers;
 
 public class AccountController : Controller
 {
-    public AccountController(SignInManager<Users> signInManager,UserManager<Users> userManager)
+    public AccountController(SignInManager<Users> signInManager,UserManager<Users> userManager, ExpenseDbContext context)
     {
         _signInManager = signInManager;
         _userManager = userManager;
+        _context = context;
     }
 
+    private readonly ExpenseDbContext _context;
     private readonly SignInManager<Users> _signInManager;
     private readonly UserManager<Users> _userManager;
     
@@ -160,5 +164,40 @@ public class AccountController : Controller
     {
         await _signInManager.SignOutAsync();
         return RedirectToAction("Index", "Home");
+    }
+
+    [Authorize]
+    [HttpPost]
+    public async Task<IActionResult> DeleteAccount()
+    {
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null) return NotFound();
+  
+        var expenses = await _context.Expenses.Where(e => e.UserId == user.Id).ToListAsync();
+        _context.Expenses.RemoveRange(expenses);
+        
+        await _context.SaveChangesAsync();
+        await _signInManager.SignOutAsync();
+        await _userManager.DeleteAsync(user);
+        
+        return RedirectToAction("Index", "Home");
+    }
+
+    [Authorize]
+    [HttpPost]
+    public async Task<IActionResult> DeleteUserAccount(string id)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        if (user == null) return NotFound();
+        
+        var expenses = await _context.Expenses.Where(e => e.UserId == user.Id).ToListAsync();
+        _context.Expenses.RemoveRange(expenses);
+        await _context.SaveChangesAsync();
+        // await _userManager.sign
+
+        var result = await _userManager.DeleteAsync(user);
+        if (!result.Succeeded) return BadRequest();
+
+        return RedirectToAction("Users");
     }
 }

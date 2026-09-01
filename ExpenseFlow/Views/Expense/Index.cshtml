@@ -73,10 +73,22 @@
                         @expense.RecurringType
                     </td>
                     <td>
-                        @* asp-controller="Home" *@
+                
+                        
                         <a asp-action="CreateEditExpense" asp-route-id="@expense.Id" class="me-1">Edit</a>
-                        <a asp-action="DeleteExpense" asp-route-id="@expense.Id"
-                           onclick="return confirm('Are you sure?');">Delete</a>
+                        @* <a asp-action="DeleteExpense" asp-route-id="@expense.Id" *@
+                        @*    onclick="return confirm('Are you sure?');">Delete</a> *@
+                        <form asp-action="DeleteExpense"
+                              asp-route-id="@expense.Id"
+                              method="post"
+                              class="d-inline">
+    
+                            <button type="submit"
+                                    class="btn btn-link p-0 align-baseline"
+                                    onclick="return confirm('Are you sure?');">
+                                Delete
+                            </button>
+                        </form>
                     </td>
                 </tr>
             }

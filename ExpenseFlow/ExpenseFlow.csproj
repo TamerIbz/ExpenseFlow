@@ -19,4 +19,12 @@
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\Images\AccountBg\1.jpg" />
+      <_ContentIncludedByDefault Remove="wwwroot\Images\AccountBg\2.jpg" />
+      <_ContentIncludedByDefault Remove="wwwroot\Images\AccountBg\3.webp" />
+      <_ContentIncludedByDefault Remove="wwwroot\Images\AccountBg\4.avif" />
+      <_ContentIncludedByDefault Remove="wwwroot\Images\AccountBg\5.avif" />
+    </ItemGroup>
+
 </Project>

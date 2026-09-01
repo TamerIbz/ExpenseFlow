@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseFlow.Controllers;
 
+[Authorize]
 public class ExpenseController : Controller
 {
     private readonly ExpenseDbContext _context;
@@ -14,8 +15,7 @@ public class ExpenseController : Controller
     
     private const string CreateEditExpenseName = "CreateEditExpense";
     private const string ExpensesName = "Index";
-    // private List<Expense> AllExpenses;
-    
+
     public ExpenseController( ExpenseDbContext context, UserManager<Users> userManager)
     {
         _context = context;
@@ -39,27 +39,42 @@ public class ExpenseController : Controller
         return View(allExpenses);
     }
     
+    [HttpGet]
     [Authorize]
-    public async Task<IActionResult> CreateEditExpense(int? id) // pressing on CreateEditExpense btn -> gonna show empty form if id null, ->display form
+    public async Task<IActionResult> CreateEditExpense(int? id) // display form, clicking on display btn
     {
         await ShowCategoryList();
 
         if (id != null) // show prev data that has already been created (id == id, show id table)
         {
-            var expenseInDb = _context.Expenses.SingleOrDefault(expense => expense.Id == id);
+            var userId   = _userManager.GetUserId(User);
+            var expenseInDb = await _context.Expenses.SingleOrDefaultAsync(expense => expense.Id == id && expense.UserId == userId);
+
+            if (expenseInDb == null) return NotFound();
             return View(expenseInDb);
         }
         return View();
     }
 
+    [HttpPost]
+    [Authorize]
     public async Task<IActionResult> DeleteExpense(int id)
     {
-        var expenseInDb = _context.Expenses.SingleOrDefault(expense => expense.Id == id);
-        if (expenseInDb != null) _context.Expenses.Remove(expenseInDb);
+        var userId   = _userManager.GetUserId(User);
+        
+        var expenseInDb = await _context.Expenses.SingleOrDefaultAsync(expense => expense.Id == id && expense.UserId == userId);
+        if (expenseInDb == null)
+        {
+            return NotFound();
+        }
+        
+        _context.Expenses.Remove(expenseInDb);
         await _context.SaveChangesAsync();
         return RedirectToAction(ExpensesName);
     } // delete expense 
 
+    [HttpPost]
+    [Authorize]
     public async Task<IActionResult> CreateEditExpenseForm(Expense model) // pressing button to create form with details filled in -? save form
     {
         //(!ModelState.IsValid) || 
@@ -69,16 +84,31 @@ public class ExpenseController : Controller
             await ShowCategoryList(); // show categories again since page is reloaded
             return View(CreateEditExpenseName, model);
         };
-        model.UserId = _userManager.GetUserId(User);
+        
+        var userId   = _userManager.GetUserId(User);
         if (model.Id == 0)
         {
             // creating
+            model.UserId = userId;
             _context.Expenses.Add(model);
+            
         }
         else
         {
             //edit
-            _context.Expenses.Update(model);
+            // if(model.UserId == userId)
+            // _context.Expenses.Update(model);
+
+            var expenseInDb = await _context.Expenses.SingleOrDefaultAsync(e => e.Id == model.Id && e.UserId == userId);
+            if (expenseInDb == null)
+                return NotFound();
+            
+            expenseInDb.Title = model.Title;
+            expenseInDb.Amount = model.Amount;
+            expenseInDb.CategoryId = model.CategoryId;
+            expenseInDb.Date = model.Date;
+            expenseInDb.PaymentMethod = model.PaymentMethod;
+            expenseInDb.RecurringType = model.RecurringType;
         }
 
         await _context.SaveChangesAsync();
@@ -87,16 +117,9 @@ public class ExpenseController : Controller
 
     private async Task ShowCategoryList()
     {
-        try
-        {
-            ViewBag.Categories = new SelectList(await
-                    _context.Categories.ToListAsync(),
-                nameof(Category.Id),
-                nameof(Category.Name));
-        }
-        catch (Exception e)
-        {
-            throw; // TODO handle exception
-        }
+        ViewBag.Categories = new SelectList(await
+                _context.Categories.ToListAsync(),
+            nameof(Category.Id),
+            nameof(Category.Name));
     } // show cat list
 }

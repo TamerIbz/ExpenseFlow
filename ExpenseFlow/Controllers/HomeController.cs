@@ -1,5 +1,7 @@
 using System.Diagnostics;
+using System.Globalization;
 using ExpenseFlow.Models;
+using ExpenseFlow.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,31 +15,29 @@ public class HomeController : Controller
      private readonly ExpenseDbContext _context;
      private readonly UserManager<Users> _userManager;
     
-
     public HomeController( ExpenseDbContext context, UserManager<Users> userManager)
     {
         _context = context;
         _userManager = userManager;
     }
-    
-    // what is viewbag, walk through, 
+ 
     public async Task<IActionResult> Index()
     {
         if (User.Identity?.IsAuthenticated != true)
         {
-            return View();
+            return View(new HomeViewModel());
         }
         
         var userId   = _userManager.GetUserId(User);
+        var user = await _userManager.GetUserAsync(User);
+        
         var allExpenses = await _context.Expenses
             .Where(e=>e.UserId == userId)
             .Include(e => e.Category)
             .OrderBy(i => i.Id)
             .ToListAsync();
-
-
-        // categories
-        var spendingCategory = allExpenses
+        
+        var allCategories = allExpenses
             .GroupBy(e => e.Category!.Name)
             .Select(g => new
             {
@@ -45,32 +45,45 @@ public class HomeController : Controller
                 Total = g.Sum(e => e.Amount)
             }).ToList();
         
-        // all cat names
-        ViewBag.CategoryNames = spendingCategory
+        var categoryNames = allCategories
             .Select(x => x.Category)
             .ToList();
-
-        // total spending cat name
-        ViewBag.CategoryTotals = spendingCategory
+        
+        var categoryTotalAmount = allCategories
             .Select(x => x.Total)
             .ToList();
-
         
-        // total expense digit
-        ViewBag.TotalExpenses = allExpenses.Sum(e => e.Amount);
-        var topCategory= spendingCategory
+        var totalSpent = allExpenses.Sum(e => e.Amount);
+        var topCategory= allCategories
             .OrderByDescending(i => i.Total)
             .FirstOrDefault();
-
-        ViewBag.TopCategory = topCategory?.Category;
         
         var today = DateOnly.FromDateTime(DateTime.Today);
-        ViewBag.MonthTotal =allExpenses.Where(e =>
+        var monthTotal =allExpenses.Where(e =>
             e.Date.HasValue 
             && e.Date.Value.Year == today.Year 
             && e.Date.Value.Month == today.Month).Sum(e=>e.Amount);
+
+
+       var model = new HomeViewModel()
+       {
+           Expenses = allExpenses,
+           TotalSpent = totalSpent,
+           TopCategory = topCategory?.Category,
+           MonthTotal = monthTotal,
+           CategoryTotals = categoryTotalAmount,
+           CategoryNames = categoryNames
+
+       };
+
+       var username = user?.FullName;
+       if (username != null && !string.IsNullOrEmpty(username))
+       {
+           username = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(username.ToLower());
+           ViewBag.UserName = username;
+       }
         
-        return View(allExpenses);
+        return View(model);
     }
     
     [Authorize]

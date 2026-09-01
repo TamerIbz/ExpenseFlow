@@ -5,6 +5,7 @@ namespace ExpenseFlow.ViewModels;
 public class RegisterViewModel
 {
     [Required(ErrorMessage = "Name is required")]
+    [RegularExpression(@".*\S.*", ErrorMessage = "Please enter your name")]
     public string Name { get; set; }
     [Required(ErrorMessage = "Email is required")]
     [EmailAddress]
