@@ -16,7 +16,8 @@
               asp-action="DeleteAccount"
               method="post">
 
-            <button type="submit" class="nav-link text-danger border-0 bg-transparent">
+            <button type="submit" class="nav-link text-danger border-0 bg-transparent"
+                    onclick="return confirm('Are you sure you want to delete this account?')">
                 Delete Account
             </button>
         </form>

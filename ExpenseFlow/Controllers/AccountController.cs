@@ -183,12 +183,17 @@ public class AccountController : Controller
         return RedirectToAction("Index", "Home");
     }
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpPost]
-    public async Task<IActionResult> DeleteUserAccount(string id)
+    public async Task<IActionResult> DeleteUserAccount(string userId)
     {
-        var user = await _userManager.FindByIdAsync(id);
+        var user = await _userManager.FindByIdAsync(userId);
+        var adminUser = await _userManager.GetUserAsync(User);
         if (user == null) return NotFound();
+        if (adminUser != null && user.Id == adminUser.Id)
+        {
+            return BadRequest("You cannot delete your own admin account.");
+        }
         
         var expenses = await _context.Expenses.Where(e => e.UserId == user.Id).ToListAsync();
         _context.Expenses.RemoveRange(expenses);
@@ -197,7 +202,14 @@ public class AccountController : Controller
 
         var result = await _userManager.DeleteAsync(user);
         if (!result.Succeeded) return BadRequest();
+        
+        return RedirectToAction("AdminPage");
+    }
 
-        return RedirectToAction("Users");
+    [Authorize(Roles = "Admin")]
+    [HttpGet]
+    public IActionResult AdminPage()
+    {
+        return View();
     }
 }

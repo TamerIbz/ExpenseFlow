@@ -42,6 +42,21 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+var scope = app.Services.CreateScope();
+var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Users>>();
+if (!await roleManager.RoleExistsAsync("Admin"))
+{
+    await roleManager.CreateAsync(new IdentityRole("Admin"));
+}
+
+var adminUser = await userManager.FindByEmailAsync("Admin00100@hotmail.com");
+if (adminUser != null && !await userManager.IsInRoleAsync(adminUser, "Admin"))
+{
+    await userManager.AddToRoleAsync(adminUser, "Admin");
+}
+
+
 app.UseHttpsRedirection();
 app.UseRouting();
 
