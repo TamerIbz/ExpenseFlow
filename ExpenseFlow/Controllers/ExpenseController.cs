@@ -41,7 +41,7 @@ public class ExpenseController : Controller
     
     [HttpGet]
     [Authorize]
-    public async Task<IActionResult> CreateEditExpense(int? id) // display form, clicking on display btn
+    public async Task<IActionResult> CreateEditExpense(int? id) // display form
     {
         await ShowCategoryList();
 
@@ -75,7 +75,7 @@ public class ExpenseController : Controller
 
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> CreateEditExpenseForm(Expense model) // pressing button to create form with details filled in -? save form
+    public async Task<IActionResult> CreateEditExpenseForm(Expense model) // save expense form
     {
         //(!ModelState.IsValid) || 
         if (string.IsNullOrWhiteSpace(model.Title) || (model.CategoryId == 0 || model.CategoryId == null)) // invalid form

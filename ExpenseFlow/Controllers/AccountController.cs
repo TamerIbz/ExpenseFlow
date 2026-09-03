@@ -20,7 +20,6 @@ public class AccountController : Controller
     private readonly SignInManager<Users> _signInManager;
     private readonly UserManager<Users> _userManager;
     
-    // GET
     [HttpGet]
     public IActionResult Login()
     {
@@ -201,8 +200,13 @@ public class AccountController : Controller
         // await _userManager.sign
 
         var result = await _userManager.DeleteAsync(user);
-        if (!result.Succeeded) return BadRequest();
+        if (!result.Succeeded)
+        {
+            // TempData["SuccessMessage"] = "Your account was deleted successfully.";
+            return BadRequest();
+        }
         
+        TempData["SuccessMessage"] = "Your account was deleted successfully.";
         return RedirectToAction("AdminPage");
     }
 

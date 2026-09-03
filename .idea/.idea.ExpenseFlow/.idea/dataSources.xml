@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:postgresql://localhost:5432/ExpenseFlow</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="ExpenseFlow@psql-expenseflow-dev-001.postgres.database.azure.com" uuid="e3806da0-fa07-47d7-9cb0-2da1382f512f">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://psql-expenseflow-dev-001.postgres.database.azure.com:5432/ExpenseFlow</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

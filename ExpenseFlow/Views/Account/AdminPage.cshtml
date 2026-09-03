@@ -6,14 +6,26 @@
           asp-action="DeleteUserAccount"
           method="post"
           class="d-flex align-items-center gap-3">
+        
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert">
+                </button>
+            </div>
+        }
 
         <label class="form-label mb-0">Delete User Account</label>
 
         @* can change name/type both to email (will have to change param in account controller*@
-        <input name="userId" 
+        <input name="userId"
                type="text"
                class="form-control"
-               placeholder="Enter user's ID" />
+               placeholder="Enter user's ID"/>
 
         <button type="submit"
                 class="btn btn-danger"
