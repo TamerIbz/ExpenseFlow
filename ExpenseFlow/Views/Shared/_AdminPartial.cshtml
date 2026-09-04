@@ -1,11 +1,12 @@
 ﻿@using Microsoft.AspNetCore.Identity;
 @inject SignInManager<Users> SignInManager;
 
-<ul class="navbar-nav ms-auto">
+@* <ul class="navbar-nav ms-auto"> *@
     @if (User.IsInRole("Admin"))
     {
         <li class="nav-item">
-            <a class="nav-link text-danger-emphasis fw-bold" asp-area="" asp-controller="Account" asp-action="AdminPage">ADMIN</a>
+            <a class="nav-link text-danger-emphasis fw-bold" 
+               asp-area="" asp-controller="Account" asp-action="AdminPage">ADMIN</a>
         </li> 
     }
-</ul>
+@* </ul> *@

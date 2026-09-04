@@ -2,34 +2,23 @@
 @using Microsoft.AspNetCore.Identity;
 @inject SignInManager<Users> SignInManager;
 
-<ul class="navbar-nav ms-auto">
+@* <ul class="navbar-nav ms-auto"> *@
     @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item">
             <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Logout</a>
         </li>
-        @* <li class="nav-item"> *@
-        @*     <a class="nav-link text-dark" asp-controller="Account" asp-action="DeleteAccount">Delete</a> *@
-        @* </li> *@
-        
-        <form asp-controller="Account"
-              asp-action="DeleteAccount"
-              method="post">
 
-            <button type="submit" class="nav-link text-danger border-0 bg-transparent"
-                    onclick="return confirm('Are you sure you want to delete this account?')">
-                Delete Account
-            </button>
-        </form>
+        <li class="nav-item">
+            <form asp-controller="Account"
+                  asp-action="DeleteAccount"
+                  method="post">
+
+                <button type="submit" class="nav-link text-danger border-0 bg-transparent" @* can text-center*@
+                        onclick="return confirm('Are you sure you want to delete this account?')">
+                    Delete Account
+                </button>
+            </form>
+        </li>
     }
-    
-    else
-    {
-        @* <li class="nav-item"> *@
-        @*     <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Login</a> *@
-        @* </li> *@
-        @* <li class="nav-item"> *@
-        @*     <a class="nav-link text-dark" asp-controller="Account" asp-action="SignUp">Sign Up</a> *@
-        @* </li> *@
-    }
-</ul>
+@* </ul> *@

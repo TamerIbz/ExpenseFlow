@@ -7,15 +7,17 @@
 @using Microsoft.EntityFrameworkCore.Metadata.Internal
 @* @inject SignInManager<Users> SignInManager; *@
 
-@section Styles {
-    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
-}
+
+@* use home.css for custom bg ect *@
+@* @section Styles { *@
+@*     <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" /> *@
+@* } *@
 
 <div class="home-background text-center">
 @if(User.Identity?.IsAuthenticated == true)
 {
     <div class="position-relative text-center">
-        <div class="position-absolute start-0">
+        <div class="position-static position-mb-absolute start-0 mb-3 mb-md-0">
             <div class="d-inline-flex align-items-center bg-light border rounded-3 px-3 py-2 shadow-sm">
                 <span class="fw-semibold">Hi @ViewBag.UserName 👋</span>
             </div>
