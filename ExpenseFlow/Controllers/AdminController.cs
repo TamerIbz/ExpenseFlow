@@ -32,7 +32,7 @@ public class AdminController : Controller
     {
         var user = await _userManager.FindByIdAsync(userId);
         var adminUser = await _userManager.GetUserAsync(User);
-        if (user == null) return NotFound();
+        if (user == null) return NotFound($"Cannot find account with ID {userId}");
         if (adminUser != null && user.Id == adminUser.Id)
         {
             return BadRequest("You cannot delete your own admin account.");

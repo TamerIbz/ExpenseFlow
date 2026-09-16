@@ -79,14 +79,6 @@ public class AccountController : Controller
     {
         if (ModelState.IsValid)
         {
-            // Users user = new Users
-            // {
-            //     FullName = model.Name,
-            //     Email = model.Email,
-            //     UserName = model.Email
-            // };
-            //
-            // var result = await _userManager.CreateAsync(user, model.Password);
             var result = await _accountService.RegisterAsync(model);
             
             if (result.Result.Succeeded)
@@ -102,7 +94,19 @@ public class AccountController : Controller
                 
                 return RedirectToAction("EmailSent", "Account");
             }
-  
+            
+            if (result.Result.Errors.Any(e =>
+                    e.Code == "DuplicateEmail" ||
+                    e.Code == "DuplicateUserName"))
+            {
+                ModelState.AddModelError(
+                    "",
+                    "An account with this email already exists."
+                );
+
+                return View(model);
+            }
+
             foreach (var error in result.Result.Errors)
             {
                 ModelState.AddModelError("", error.Description);

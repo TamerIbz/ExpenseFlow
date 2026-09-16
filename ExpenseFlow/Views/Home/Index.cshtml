@@ -21,10 +21,6 @@
             <div class="d-inline-flex align-items-center bg-light border rounded-3 px-3 py-2 shadow-sm">
                 <span class="fw-semibold">Hi @ViewBag.UserName 👋</span>
             </div>
-            
-            @* <span class="badge rounded-pill bg-light text-dark border px-3 py-2 shadow-sm"> *@
-            @*     Hi @ViewBag.UserName *@
-            @* </span> *@
         </div>
         <div>
             <h1 class="display-4 fw-bold">ExpenseFlow</h1>
@@ -116,11 +112,6 @@ else
     <label>Please sign in to manager your expenses!</label>
     <br/>
     <br/>
-    @* <a class="nav-link text-dark" *@
-    @*    asp-controller="Account" *@
-    @*    asp-action="Login"> *@
-    @*     Login *@
-    @* </a> *@
     
     <a asp-controller="Account" asp-action="Login" class="btn btn-primary">Login</a>
     <a asp-controller="Account" asp-action="SignUp" class="btn btn-secondary">SignUp</a>

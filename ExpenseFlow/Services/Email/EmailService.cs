@@ -1,10 +1,6 @@
 ﻿using System.Net;
 using System.Net.Mail;
-using Azure.Core;
 using ExpenseFlow.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
 
 namespace ExpenseFlow.Services;
@@ -12,12 +8,10 @@ namespace ExpenseFlow.Services;
 public class EmailService : IEmailService
 {
     public EmailService(IOptions<EmailSettings> options)
-    {
-        // _configuration = configuration;
+    { ;
         _emailSettings = options.Value;
     }
-
-    // private readonly IConfiguration _configuration;
+    
     private readonly EmailSettings _emailSettings;
     
     public async Task SendEmailAsync(string toEmail, string subject, string body)
