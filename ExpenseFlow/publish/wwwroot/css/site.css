@@ -29,3 +29,94 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+
+
+.main-nav {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* ===== Multi Col Menu ===== */
+@media (max-width: 575.98px) {
+
+  .navbar-collapse {
+    display: grid;
+    grid-template-columns: repeat(5, 0.6fr);
+    width: 100%;
+    gap: .118rem 0;
+  }
+
+  .main-nav,
+  .account-nav
+  {
+    /*position: static;*/
+    /*transform: none;*/
+    /*margin: 0 !important;*/
+    display: contents;
+  }
+
+
+  .navbar-collapse,
+  .navbar-collapse.show{
+    transform: translateX(-0.8rem);
+    /*padding-right: 0.5rem;*/
+    display: grid;
+    grid-template-columns: repeat(5, 0.6fr);
+    width: 100%;
+    gap: .118rem 0;
+  }
+
+  .navbar-nav .nav-item {
+    width: 100%;
+  }
+
+  .navbar-nav .nav-link,
+  .navbar-nav form button {
+    width: 100%;
+    text-align: center;
+  }
+}
+@media (max-width: 575.98px)
+{ /* if want to use -> make <li> in layout.cshtml in login partial section, this makes logout and delete account on same row*/
+  .login-item
+  {
+    grid-column: 1 / -1;
+  }
+}
+/* ===== End Multi Col Menu ===== */
+
+
+/* ===== Single Col Menu ===== WILL NEED TO REMOVE account-nav- in layout*/
+/*@media (max-width: 575.98px) {*/
+/*    .main-nav,*/
+/*    .account-nav {*/
+/*        position: static;*/
+/*        transform: none;*/
+/*        margin: 0 !important;*/
+/*        display: contents;*/
+/*    }*/
+
+/*    .navbar-collapse {*/
+/*        width: 100%;*/
+/*    }*/
+
+/*    .navbar-nav {*/
+/*        width: 100%;*/
+/*    }*/
+
+/*    .navbar-nav .nav-item {*/
+/*        width: 100%;*/
+/*    }*/
+
+/*    .navbar-nav .nav-link {*/
+/*        text-align: center;*/
+/*    }*/
+
+/*    .navbar-nav form button {*/
+/*        width: 100%;*/
+/*        !*text-align: center;*!*/
+/*    }*/
+/*}*/
+/* ===== Single Col Menu ===== */

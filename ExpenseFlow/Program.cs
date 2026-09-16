@@ -1,6 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using ExpenseFlow.Models;
+using ExpenseFlow.Services;
+using ExpenseFlow.Services.Account;
+using ExpenseFlow.Services.Home;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.Identity.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,12 +26,23 @@ builder.Services.AddIdentity<Users, IdentityRole>(options =>
         options.User.RequireUniqueEmail = true;
         options.SignIn.RequireConfirmedAccount = false;
         options.SignIn.RequireConfirmedPhoneNumber = false;
+        options.SignIn.RequireConfirmedEmail = true;
     })
     .AddEntityFrameworkStores<ExpenseDbContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
+{
+    options.TokenLifespan = TimeSpan.FromHours(2);
+});
+
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddTransient<IEmailService, EmailService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IHomeService, HomeService>();
 
 var app = builder.Build();
+await SeedService.SeedDatabase(app.Services);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -35,21 +51,6 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
-var scope = app.Services.CreateScope();
-var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Users>>();
-if (!await roleManager.RoleExistsAsync("Admin"))
-{
-    await roleManager.CreateAsync(new IdentityRole("Admin"));
-}
-
-var adminUser = await userManager.FindByEmailAsync("Admin00100@hotmail.com");
-if (adminUser != null && !await userManager.IsInRoleAsync(adminUser, "Admin"))
-{
-    await userManager.AddToRoleAsync(adminUser, "Admin");
-}
-
 
 app.UseHttpsRedirection();
 app.UseRouting();

@@ -2,11 +2,13 @@
 
 namespace ExpenseFlow.ViewModels;
 
-public class ChangePasswordViewModel
+public class ResetPasswordViewModel
 {
     [Required(ErrorMessage = "Email is required")]
     [EmailAddress]
     public string Email { get; set; }=string.Empty;
+
+    [Required] public string Token { get; set; } = string.Empty;
     
     [Required(ErrorMessage = "Password is required")]
     [StringLength(40,MinimumLength = 8, ErrorMessage="the {0} must be at {2} and at max {1} characters long.")]

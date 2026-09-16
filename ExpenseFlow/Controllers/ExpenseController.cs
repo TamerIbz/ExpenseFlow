@@ -95,10 +95,6 @@ public class ExpenseController : Controller
         }
         else
         {
-            //edit
-            // if(model.UserId == userId)
-            // _context.Expenses.Update(model);
-
             var expenseInDb = await _context.Expenses.SingleOrDefaultAsync(e => e.Id == model.Id && e.UserId == userId);
             if (expenseInDb == null)
                 return NotFound();
