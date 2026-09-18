@@ -217,7 +217,6 @@ public class AccountController : Controller
     #region Account
     [Authorize]
     [HttpGet]
-    // [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()
     {
         await _signInManager.SignOutAsync();
